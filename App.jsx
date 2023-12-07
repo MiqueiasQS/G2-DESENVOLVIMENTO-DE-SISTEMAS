@@ -1,17 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import { Controller } from "react-hook-form";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const QuizScreen = () => {
   const [questions, setQuestions] = useState([]);
+  const [selectedOption, setSelectedOption] = useState();
   const [questionCorrects, setQuestionCorrects] = useState(0);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [shuffledOptions, setShuffledOptions] = useState([]);
   const [quizCompleted, setQuizCompleted] = useState(false);
 
+  const [quizStart, setQuizStart] = useState(false);
+
+  const options = [
+    { label: "Easy", value: "easy", icon: "robot-happy", color: "#0f0" },
+    { label: "Medium", value: "medium", icon: "robot", color: "#FFEB3B" },
+    { label: "Hard", value: "hard", icon: "robot-angry", color: "#F00" },
+  ];
+
+  const optionsQuantity = [
+    { label: "10", value: "10" },
+    { label: "20", value: "20" },
+    { label: "30", value: "30" },
+  ];
+
   useEffect(() => {
-    fetchQuestions();
-  }, []);
+    if (quizStart) {
+      fetchQuestions();
+    }
+  }, [quizStart]);
 
   useEffect(() => {
     if (questions.length > 0 && currentQuestionIndex < questions.length) {
@@ -65,7 +85,34 @@ const QuizScreen = () => {
     setSelectedAnswer(null);
     setQuizCompleted(false);
     setQuestionCorrects(0);
+    setQuizStart(true)
   };
+
+  if (!quizStart) {
+    return (
+      <View style={styles.container}>
+        <Text>Select Difficulty:</Text>
+        <View>
+          {/* <Controller
+            render={({ field: { onChange, value } }) => (
+              <Picker
+                selectedValue={value}
+                onValueChange={onChange}
+              >
+                {options.map(option => (
+                  <Picker.Item label={option.label} value={option.value} />
+                ))}
+              </Picker>
+            )}
+            name="difficulty"
+          /> */}
+        </View>
+        <TouchableOpacity style={styles.submitButton} onPress={restartQuiz}>
+          <Text>Iniciar Quiz</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   if (questions.length === 0) {
     return (
@@ -142,6 +189,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 5,
   },
+  select: {
+  }
 });
 
 export default QuizScreen;

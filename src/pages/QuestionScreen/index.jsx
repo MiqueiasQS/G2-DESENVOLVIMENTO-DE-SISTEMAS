@@ -80,7 +80,7 @@ const QuizScreen = () => {
   if (questions.length === 0) {
     return (
       <View style={styles.container}>
-        <Text>Carregando perguntas...</Text>
+        <Text style={styles.loadingText}>Carregando perguntas...</Text>
       </View>
     );
   }
@@ -195,6 +195,12 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 50,
     marginBottom: 100,
+  },
+  loadingText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 24,
   },
 });
 

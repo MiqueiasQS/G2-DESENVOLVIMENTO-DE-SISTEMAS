@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Text, View, StyleSheet } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-
+import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
+import ModalDropdown from 'react-native-modal-dropdown';
 import { useNavigation } from "@react-navigation/native";
 
 import {
@@ -15,9 +14,59 @@ function Home() {
   const [email, setEmail] = useState('');
   const [selectedNumberQuestions, setSelectedNumberQuestions] = useState('');
   const [selectedDificulty, setSelectedDificulty] = useState('');
-  const [questions, setQuestions] = useState(["10", "20", "30"]);
 
   const navigation = useNavigation();
+
+  const NumberQuestion = () => {
+    return (
+      <View>
+        <ModalDropdown
+          options={['10 questions', '20 questions', '30 questions']}
+          defaultValue="Selecione uma opção"
+          value={selectedNumberQuestions}
+          onChange={value => handleNumberQuestionsChange(value)}
+          dropdownStyle={{ width: 200, height: 200, backgroundColor: '#7145BC', borderWidth: 1 }}
+          dropdownTextStyle={{ color: '#fff', fontSize: 18, backgroundColor: '#7145BC', width: '100%', padding: 10, borderRadius: 8, marginTop: 10 }}
+          dropdownTextHighlightStyle={{ color: '#41FF2A' }}
+          dropdownButtonStyle={{ width: 200, height: 40, backgroundColor: 'gray', borderRadius: 5 }}
+          dropdownArrowStyle={{ color: '#fff', fontSize: 14 }}
+          textStyle={{ color: '#fff', fontSize: 18, backgroundColor: '#7145BC', width: '100%', padding: 10, borderRadius: 8, marginTop: 10 }}
+        />
+      </View>
+    );
+  };
+
+  const SelectDificulty = () => {
+    return (
+      <View>
+        <ModalDropdown
+          options={['Easy', 'Medium', 'Hard']}
+          defaultValue="Selecione uma opção"
+          value={selectedDificulty}
+          onChange={(value) => handleDificultyChange(value)}
+          dropdownStyle={{ width: 200, height: 200, backgroundColor: '#7145BC', borderWidth: 1 }}
+          dropdownTextStyle={{ color: 'white', fontSize: 18, backgroundColor: '#7145BC', width: '100%', padding: 10, borderRadius: 8, marginTop: 10 }}
+          dropdownTextHighlightStyle={{ color: '#41FF2A' }}
+          dropdownButtonStyle={{ width: 200, height: 40, backgroundColor: 'gray', borderRadius: 5 }}
+          dropdownArrowStyle={{ color: 'white', fontSize: 14 }}
+          textStyle={{ color: '#fff', fontSize: 18, backgroundColor: '#7145BC', width: '100%', padding: 10, borderRadius: 8, marginTop: 10 }}
+        />
+      </View>
+    );
+  };
+
+  const validarDados = () => {
+    if (name === '' || email === '') {
+      alert('Por favor, preencha todos os campos.');
+    } else {
+      // Exiba uma mensagem de erro ou faça alguma ação caso os dados não estejam preenchidos
+      handleButtonPress
+    }
+  };
+
+  const handleButtonPress = () => {
+    navigation.navigate('Questions');
+  };
 
   const handleNumberQuestionsChange = (event) => {
     setSelectedNumberQuestions(event.target.value);
@@ -33,10 +82,6 @@ function Home() {
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
-  };
-
-  const getQuestions = () => {
-    return questions;
   };
 
   return (
@@ -63,23 +108,17 @@ function Home() {
 
         <Text style={styles.Text}>Número de Questões:</Text> 
         <InputContainer>
-          <Picker 
-            onValueChange={handleNumberQuestionsChange} 
-            selectedValue={selectedNumberQuestions}
-            items={getQuestions()}
-          />
+          <NumberQuestion/>
         </InputContainer>
 
         <Text style={styles.Text}>Dificultade:</Text> 
         <InputContainer>
-          <Picker 
-            onValueChange={handleDificultyChange} 
-            selectedValue={selectedDificulty}
-            items={["easy", "medium", "hard"]}
-          />
+          <SelectDificulty/>
         </InputContainer>
 
-        <Button title="Start" onPress={() => navigation.navigate('Questions')}/>
+        <TouchableOpacity style={styles.startButton} onPress={validarDados}>
+          <Text style={styles.Text}>START</Text>
+        </TouchableOpacity>
 
       </View>
 
@@ -90,7 +129,7 @@ function Home() {
 const styles = StyleSheet.create({
 
   Nome: {
-    fontSize: 24,
+    fontSize: 34,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 120,
@@ -104,7 +143,15 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: '600',
-  }
+  },
+  startButton: {
+    backgroundColor: '#1CB201',
+    padding: 15,
+    marginVertical: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 40,
+  },
 });
 
 

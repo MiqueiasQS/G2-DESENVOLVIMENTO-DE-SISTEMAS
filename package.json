@@ -9,14 +9,21 @@
     "web": "set NODE_OPTIONS=--openssl-legacy-provider && expo start --web"
   },
   "dependencies": {
-    "@expo/webpack-config": "^0.17.0",
-    "@react-native-picker/picker": "^2.6.1",
+    "@expo/webpack-config": "^19.0.0",
+    "@react-native-picker/picker": "2.4.10",
+    "@react-navigation/native": "^6.1.9",
+    "@react-navigation/native-stack": "^6.9.17",
     "expo": "~49.0.8",
+    "expo-blur": "~12.4.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.48.2",
-    "react-native": "0.72.4",
-    "react-native-web": "~0.19.6"
+    "react-native": "^0.72.6",
+    "react-native-dropdown-select-list": "^2.0.5",
+    "react-native-modal-dropdown": "^1.0.2",
+    "react-native-picker-select": "^9.0.0",
+    "react-native-web": "~0.19.6",
+    "styled-components": "^6.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

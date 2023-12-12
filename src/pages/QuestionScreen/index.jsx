@@ -31,7 +31,7 @@ const QuizScreen = () => {
 
   const fetchQuestions = async () => {
     try {
-      const response = await fetch('https://opentdb.com/api.php?amount=10&category=18&difficulty=easy&type=multiple');
+      const response = await fetch('https://opentdb.com/api.php?amount=' + route.params.selectedNumberQuestions.substring(0, 2) + '&category=18&difficulty=' + route.params.selectedDificulty.toLowerCase() + '&type=multiple');
       const data = await response.json();
       setQuestions(data.results);
     } catch (error) {
@@ -111,7 +111,7 @@ const QuizScreen = () => {
     <View style={styles.container}>
       <View style={styles.questionContainer}>
         <Text style={styles.categoricalText}>Question {questions[currentQuestionIndex].category}</Text>
-        <Text style={styles.indexQuestion}>Question {currentQuestionIndex + 1} of 10</Text>
+        <Text style={styles.indexQuestion}>Question {currentQuestionIndex + 1} of {route.params.selectedNumberQuestions.substring(0, 2)}</Text>
         <Text style={styles.questionText}>{questions[currentQuestionIndex].question}</Text>
       </View>
 

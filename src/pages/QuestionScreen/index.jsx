@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Button } from 'react-native';
 
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const QuizScreen = () => {
   const [questions, setQuestions] = useState([]);
@@ -12,8 +12,10 @@ const QuizScreen = () => {
   const [quizCompleted, setQuizCompleted] = useState(false);
 
   const navigation = useNavigation();
+  const route = useRoute();
+  console.log(route.params);
 
-  function moveToResults(){
+  function moveToResults() {
     navigation.navigate('Results');
   }
 
@@ -58,7 +60,7 @@ const QuizScreen = () => {
       if (isCorrect) {
         setQuestionCorrects(questionCorrects + 1);
       }
-      if (selectedAnswer === null){
+      if (selectedAnswer === null) {
         alert("Selecione uma resposta");
         return;
       }
@@ -91,7 +93,7 @@ const QuizScreen = () => {
         <Text>Desafio concluído! Você acertor {questionCorrects} questões.</Text>
         <TouchableOpacity style={styles.restartButton} onPress={restartQuiz}>
           <Text>Reiniciar Quiz</Text>
-          <Button title="Resultado" onPress={() => navigation.navigate('Results')}/>
+          <Button title="Resultado" onPress={() => navigation.navigate('Results')} />
         </TouchableOpacity>
       </View>
     );

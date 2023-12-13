@@ -1,5 +1,7 @@
 import React from 'react';
-import { TextInput, View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { db } from "../../firebase/firebase";
+import { push, ref, remove, update, onValue } from "firebase/database";
 
 import { useNavigation, useRoute } from "@react-navigation/native";
 

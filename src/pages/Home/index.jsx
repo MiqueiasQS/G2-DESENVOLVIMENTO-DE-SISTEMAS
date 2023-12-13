@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { useNavigation } from "@react-navigation/native";
 
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { db, app } from "../../firebase/firebase";
+import { db } from "../../firebase/firebase";
 
 import {
   Container,
   InputContainer,
   Input,
 } from "./styles";
-import { push, ref, remove, update, onValue } from "firebase/database";
+import { ref, set, onValue } from 'firebase/database';
 
 function Home() {
   const [name, setName] = useState('');
@@ -74,10 +73,16 @@ function Home() {
           });
 
           if (filteredUsers.length === 0) {
-            push(ref(db, "/user"), {
+            const emailKey = email.replace(".", "_");
+            const userRef = ref(db, `/user/${emailKey}`);
+
+            set(userRef, {
               name: name,
               email: email,
             });
+
+            // localStorage.setItem('email', emailKey);
+            // localStorage.setItem('name', name);
           }
         }
       );

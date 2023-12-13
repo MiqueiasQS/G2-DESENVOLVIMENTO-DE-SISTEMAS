@@ -16,7 +16,7 @@ const QuizScreen = () => {
   console.log(route.params);
 
   function moveToResults() {
-    navigation.navigate('Results');
+    navigation.navigate('Results', { questionCorrects, currentQuestionIndex });
   }
 
   useEffect(() => {

@@ -1,21 +1,23 @@
 import React from 'react';
-import { TextInput, View, Text, Button, StyleSheet, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { db } from "../../firebase/firebase";
+import { push, ref, remove, update, onValue } from "firebase/database";
 
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 function Results() {
-
   const navigation = useNavigation();
+  const route = useRoute();
 
   return (
     <View style={styles.container}>
 
-      <Text style={styles.Title}>Results</Text> 
-      <Text style={styles.Scored}>Your Scored 5/10</Text>
+      <Text style={styles.Title}>Results</Text>
+      <Text style={styles.Scored}>Your Scored {route.params.questionCorrects}/{route.params.currentQuestionIndex + 1}</Text>
       <Text style={styles.Rank}>Ranking</Text>
 
       <TouchableOpacity style={styles.buttonPlayAgain} onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.buttonText}>PLAY AGAIN</Text>
+        <Text style={styles.buttonText}>PLAY AGAIN</Text>
       </TouchableOpacity>
 
     </View>

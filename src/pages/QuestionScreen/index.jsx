@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Button } from 'react-native';
+import { db } from "../../firebase/firebase";
+import { push, ref, remove, update, onValue } from "firebase/database";
 
 import { useNavigation, useRoute } from "@react-navigation/native";
 
@@ -13,10 +15,19 @@ const QuizScreen = () => {
 
   const navigation = useNavigation();
   const route = useRoute();
-  console.log(route.params);
 
   function moveToResults() {
-    navigation.navigate('Results');
+    push(ref(db, "/store"), {
+      total: currentQuestionIndex + 1,
+      acertos: questionCorrects
+    });
+
+    // update(storeRef, {
+    //   total: route.params.currentQuestionIndex + 2,
+    //   acertos: route.params.questionCorrects
+    // });
+
+    navigation.navigate('Results', { questionCorrects, currentQuestionIndex });
   }
 
   useEffect(() => {

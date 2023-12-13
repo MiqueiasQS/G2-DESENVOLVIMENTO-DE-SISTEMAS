@@ -3,7 +3,7 @@ import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { useNavigation } from "@react-navigation/native";
 
-import { getAuth, createUserWithEmailAndPassword} from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { db, app } from "../../firebase/firebase";
 
 import {
@@ -11,7 +11,7 @@ import {
   InputContainer,
   Input,
 } from "./styles";
-import { ref } from 'firebase/database';
+import { push, ref, remove, update, onValue } from "firebase/database";
 
 function Home() {
   const [name, setName] = useState('');
@@ -20,7 +20,7 @@ function Home() {
   const [selectedDificulty, setSelectedDificulty] = useState('Selecione...');
 
   const navigation = useNavigation();
-  
+
   const NumberQuestion = () => {
     return (
       <View>
@@ -64,58 +64,33 @@ function Home() {
   };
 
   const checkUserExists = async (name, email) => {
-    // Verifique se o usuário existe
     try {
-      const snapshot = await db.ref('user').orderByChild('email').equalTo(email).once('value');
-      const user = snapshot.val();
-  
-      if (user) {
-        // Verifique se o nome do usuário também corresponde
-        if (user.name === name || user.email === email) {
+      onValue(
+        ref(db, `/user/`),
+        (retorno) => {
+          const users = retorno.val() || {};
+          const filteredUsers = Object.entries(users).filter(([userId, userData]) => {
+            return userData.email === email;
+          });
 
-          if(user.name === name){
-            setNameError("O nome já está cadastrado com esse e-mail.");
-            return true
+          if (filteredUsers.length === 0) {
+            push(ref(db, "/user"), {
+              name: name,
+              email: email,
+            });
           }
-          if(user.email === email){
-            setNameError("O e-mail já está cadastrado com esse nome.");
-            return true
-          }
-          setNameError("O nome e email ja estão cadastrados");
-          return true; // Usuário existe
-        } else {
-          console.log('Opa, deu certo')
-          return false;
         }
-      } else {
-        setNameError("Usuário não existe");
-        return true; // Email não existe
-      }
+      );
+      start();
     } catch (error) {
-      setNameError("Não sei o que ta acontecendo");
+      setNameError("Falha ao se conectar ao firebase!!");
       console.error(error);
     }
   }
 
-  const createUser = async (name, email) => {
-    try {
-      // Crie um novo usuário
-      const user = await db.ref('user').push();
-  
-      // Defina os dados do usuário
-      user.set({
-        email,
-        name,
-      });
-  
-      // Retorne o usuário criado
-      return user.val();
-    } catch (error) {
-      console.error(error);
-      return null; // Erro ao criar usuário
-    }
-  };
-  
+  const setNameError = (error) => {
+    alert(error);
+  }
 
   const validarDados = async () => {
 
@@ -123,11 +98,11 @@ function Home() {
 
       alert('Por favor, preencha todos os campos.');
     } else {
-      checkUserExists(email, name)
+      checkUserExists(name, email)
     }
   };
 
-  const handleButtonPress = () => {
+  const start = () => {
     navigation.navigate('Questions', { selectedNumberQuestions, selectedDificulty });
   };
 

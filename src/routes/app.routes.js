@@ -1,8 +1,8 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import Home from '../pages/HomeScreen';
-import Questions from "../pages/QuestionScreen"
+import Home from '../pages/Home';
+import QuizScreen from "../pages/QuestionScreen"
 import Results from "../pages/ResultScreen"
 
 const AuthStack = createNativeStackNavigator();
@@ -19,7 +19,7 @@ function AppRoutes() {
             />
             <AuthStack.Screen
                 name="Questions"
-                component={Questions}
+                component={QuizScreen}
                 options={{
                     headerShown: false,
                 }}

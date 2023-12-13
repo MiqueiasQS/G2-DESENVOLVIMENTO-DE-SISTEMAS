@@ -1,27 +1,70 @@
-import React, { useState } from 'react';
-import { TextInput, View, Text } from 'react-native';
+import React from 'react';
+import { TextInput, View, Text, Button, StyleSheet, TouchableOpacity} from 'react-native';
 
-function Home() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+import { useNavigation } from "@react-navigation/native";
 
-  const handleNameChange = (event) => {
-    setName(event.target.value);
-  };
+function Results() {
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
+  const navigation = useNavigation();
 
   return (
-    <View>
-      <Text>Nome:</Text>
-      <TextInput placeholder="nome" type="text" id="name" value={name} onChange={handleNameChange} />
+    <View style={styles.container}>
 
-      <Text>Email:</Text>
-      <TextInput placeholder="e-mail" type="email" id="email" value={email} onChange={handleEmailChange} />
+      <Text style={styles.Title}>Results</Text> 
+      <Text style={styles.Scored}>Your Scored 5/10</Text>
+      <Text style={styles.Rank}>Ranking</Text>
+
+      <TouchableOpacity style={styles.buttonPlayAgain} onPress={() => navigation.navigate('Home')}>
+          <Text style={styles.buttonText}>PLAY AGAIN</Text>
+      </TouchableOpacity>
+
     </View>
   );
 }
 
-export default Home;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#45237F',
+  },
+
+  Title: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    color: '#fff',
+    top: 80,
+    position: "absolute",
+  },
+
+  Scored: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#fff',
+    top: 200,
+    position: "absolute",
+  },
+  Rank: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#fff',
+    top: 250,
+    position: "absolute",
+  },
+  buttonPlayAgain: {
+    backgroundColor: '#1CB201',
+    padding: 10,
+    paddingHorizontal: 20,
+    marginVertical: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  }
+});
+
+export default Results;

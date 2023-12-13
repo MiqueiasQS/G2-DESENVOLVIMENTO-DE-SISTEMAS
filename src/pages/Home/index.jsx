@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { useNavigation } from "@react-navigation/native";
+
+import { db } from "../../firebase/firebase";
 
 import {
   Container,
   InputContainer,
   Input,
 } from "./styles";
+import { ref, set, onValue } from 'firebase/database';
 
 function Home() {
   const [name, setName] = useState('');
@@ -59,17 +62,52 @@ function Home() {
     );
   };
 
-  const validarDados = () => {
+  const checkUserExists = async (name, email) => {
+    try {
+      onValue(
+        ref(db, `/user/`),
+        (retorno) => {
+          const users = retorno.val() || {};
+          const filteredUsers = Object.entries(users).filter(([userId, userData]) => {
+            return userData.email === email;
+          });
+
+          if (filteredUsers.length === 0) {
+            const emailKey = email.replace(".", "_");
+            const userRef = ref(db, `/user/${emailKey}`);
+
+            set(userRef, {
+              name: name,
+              email: email,
+            });
+
+            // localStorage.setItem('email', emailKey);
+            // localStorage.setItem('name', name);
+          }
+        }
+      );
+      start();
+    } catch (error) {
+      setNameError("Falha ao se conectar ao firebase!!");
+      console.error(error);
+    }
+  }
+
+  const setNameError = (error) => {
+    alert(error);
+  }
+
+  const validarDados = async () => {
+
     if (name === '' || email === '') {
+
       alert('Por favor, preencha todos os campos.');
     } else {
-      console.log('entrou');
-      // Exiba uma mensagem de erro ou faça alguma ação caso os dados não estejam preenchidos
-      handleButtonPress();
+      checkUserExists(name, email)
     }
   };
 
-  const handleButtonPress = () => {
+  const start = () => {
     navigation.navigate('Questions', { selectedNumberQuestions, selectedDificulty });
   };
 
@@ -99,7 +137,7 @@ function Home() {
         <InputContainer>
           <Input
             value={name}
-            onChange={handleNameChange}
+            onChangeText={handleNameChange}
           />
         </InputContainer>
 
@@ -107,7 +145,7 @@ function Home() {
         <InputContainer>
           <Input
             value={email}
-            onChange={handleEmailChange}
+            onChangeText={handleEmailChange}
           />
         </InputContainer>
 
